@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+        }
+
+            .navbar a {
+                float: left;
+                font-size: 16px;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+        .dropdown {
+            float: left;
+            overflow: hidden;
+        }
+
+            .dropdown .dropbtn {
+                font-size: 16px;
+                border: none;
+                outline: none;
+                color: white;
+                padding: 14px 16px;
+                background-color: inherit;
+                font-family: inherit;
+                margin: 0;
+            }
+
+            .navbar a:hover, .dropdown:hover .dropbtn {
+                background-color: #337ab7;
+            }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            .dropdown-content a {
+                float: none;
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                text-align: left;
+            }
+
+                .dropdown-content a:hover {
+                    background-color: #ddd;
+                }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .table-auto {
+            overflow: auto;
+            height: 400px;
+        }
+        .table .thead-dark th {
+            color: #fff;
+            background-color: #343a40;
+            border-color: #454d55;
+        }
+        .question-list{
+            margin-bottom:10px;
+        }
+        .pl-0{
+            padding-left:0px;
+        }
+        .question-wrapper{
+            max-height:300px;
+            overflow:auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        @if (Session["UserType"].ToString() == "2")
+        {
+            <a href="/Questions/Index/">Questions</a>
+            <a href="/QuestionBank/Index/">Question Bank</a>
+            <a href="/QuestionPaper/Index/">Question Paper</a>
+            <a href="/PaperAssignment/Index/">Student Paper Management</a>
+            <a href="/User/Index/">User Management</a>
+        }
+        else
+        {
+            <a href="/StudentExam/AssignedPaper/">Assigned Paper</a>
+        }
+        <a href="/Login/LogOut/" style="float: right;">Logged Out</a>
+    </div>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Log in to continue - Log in with Examination Portal</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+</head>
+<style>
+    #divLogin {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+    .loginbtn-block, .wrap-form-control {
+        display: flex;
+        justify-content: center;
+    }
+</style>
+<body>
+    <div>
+        @RenderBody()
+    </div>
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+</body>
+</html>

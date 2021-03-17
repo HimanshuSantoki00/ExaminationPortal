@@ -1,0 +1,46 @@
+﻿@model IEnumerable<ExaminationPortal.Models.StudentPaperDetail>
+
+@{
+    ViewBag.Title = "Assigned Paper";
+}
+
+<h2>Assigned Paper</h2>
+
+<div class="table-auto">
+    <table class="table table-responsive">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PaperName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.QPaperStatus)
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PaperName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QPaperStatus)
+                </td>
+                <td>
+                    @if (!item.IsExamCompleted)
+                    {
+                        @Html.ActionLink("Start Exam", "Index", new { StudentPaperDetailID = item.StudentPaperDetailID })
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+</div>

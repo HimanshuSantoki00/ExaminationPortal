@@ -1,0 +1,130 @@
+﻿@model ExaminationPortal.Models.StudentPaperDetail
+@{
+    ViewBag.Title = "Student Paper";
+}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<div class="form-horizontal">
+    <h2>Student Paper Management</h2>
+    <hr />
+    <label class="text-danger" id="errorMessage"></label>
+    <div class="form-group">
+        <label class="control-label col-md-2">Student</label>
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.UserIDs, (IEnumerable<SelectListItem>)ViewBag.StudentList as SelectList, new { @id = "ddlStudentList", @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-md-2">Question Paper</label>
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.QPaperIDs, (IEnumerable<SelectListItem>)ViewBag.QPaperList as SelectList, new { @id = "ddlQPaperList", @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input id="btnSave" type="button" value="Save" class="btn btn-primary" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="table-auto">
+            <table id="tblList" class="table table-responsive">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.UserName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.PaperName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.QPaperStatus)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Marks)
+                        </th>
+                        <th>Action</th>
+                        <th hidden>
+                            @Html.DisplayNameFor(model => model.UserID)
+                        </th>
+                        <th hidden>
+                            @Html.DisplayNameFor(model => model.QPaperID)
+                        </th>
+                    </tr>
+                </thead>
+                @foreach (var item in Model.StudentPaperDetailList)
+                {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PaperName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QPaperStatus)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Marks)
+                </td>
+                <td>
+                    <a href='@Url.Action("Index", "StudentExam", new { StudentPaperDetailID = item.StudentPaperDetailID })'>Details</a>
+                </td>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.UserID)
+                </td>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.QPaperID)
+                </td>
+            </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#btnSave").click(function () { Save(); });
+    });
+
+    function Save() {
+        $("#errorMessage").html("");
+
+        var selectedStudentID = $("#ddlStudentList").val();
+        var selectedQPaperID = $("#ddlQPaperList").val();
+        if (selectedStudentID <= 0 || selectedStudentID == '' || selectedStudentID == null) {
+            $("#errorMessage").html("Student is required.");
+            return;
+        }
+        if (selectedQPaperID <= 0 || selectedQPaperID == '' || selectedQPaperID == null) {
+            $("#errorMessage").html("Question Paper is required.");
+            return;
+        }
+
+        var param = JSON.stringify({ 'UserID': selectedStudentID, 'QPaperID': selectedQPaperID });
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("AssignPaperToStudent", "PaperAssignment")',
+            data: param,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            success: function (response) {
+                $("#errorMessage").html(response);
+                window.setTimeout(function () {
+                    location.reload();
+                }, 5000);
+
+            },
+            error: function (response) {
+                $("#errorMessage").html(response.responseText);
+                window.setTimeout(function () {
+                    location.reload();
+                }, 5000);
+            }
+        });
+    }
+</script>

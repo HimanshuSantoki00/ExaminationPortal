@@ -1,0 +1,52 @@
+﻿@model IEnumerable<ExaminationPortal.Models.User>
+
+@{
+    ViewBag.Title = "User";
+}
+
+<br />
+<div class="mt-3">
+    <a href="/User/Create/" class="btn btn-primary button">Add new User</a>
+</div>
+<br />
+<div class="table-auto">
+    <table class="table table-responsive">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.UserPassword)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserType)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.UserPassword)
+                </td>
+
+                @if (item.UserType == 2)
+                {
+                    <td>Teacher</td>
+                }
+                else
+                {
+                    <td>Student</td>
+                }
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.UserID })
+                </td>
+            </tr>
+        }
+    </table>
+</div>

@@ -1,0 +1,87 @@
+﻿@model ExaminationPortal.Models.QBankAndQuestionMappingList
+@{
+    ViewBag.Title = "Mapping - Question Bank and Question";
+}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h2>Mapping - Question Bank and Question</h2>
+    <hr />
+    <label class="text-danger">Note: Select questions to map with Question Bank.</label><br />
+    <label class="text-danger" id="errorMessage"></label>
+    <div class="question-wrapper">
+        @foreach (var item in Model.MappingList)
+        {
+            <div class="question-list">
+                <input id="@(item.Value)"
+                       type="checkbox"
+                       value="@item.Value"
+                       checked="@item.IsChecked" />
+                @item.Text <br />
+            </div>
+        }
+    </div>
+</div>
+    <hr />
+    <div class="form-group">
+        <div class="col-md-12 pl-0">
+            <input type="button" id="btnSave" value="Save" class="btn btn-primary" />
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div>
+        <a href="/QuestionBank/Index" class="btn btn-default">Back to Question Bank</a>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $("#btnSave").click(function () { Save(); });
+    });
+
+    function Save() {
+        $("#errorMessage").html("");
+        var selectedQuestions = [];
+
+        if ($("input:checkbox").length == 0 || $("input:checkbox").length == undefined) {
+            $("#errorMessage").html("No Questions found to map in Question Bank.");
+            return;
+        }
+
+        $("input:checkbox").each(function () {
+            var $this = $(this);
+            if ($this.is(":checked")) {
+                selectedQuestions.push($this.attr("id"));
+            }
+        });
+
+        if (selectedQuestions.length <= 0) {
+            $("#errorMessage").html("You must have to select atleast one Question.");
+            return;
+        }
+
+        var QuestionIDs = selectedQuestions.join(",");
+        var param = JSON.stringify({ 'QBankID': @ViewBag.QBankID, 'selectedQuestionsID': QuestionIDs});
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("AddQBankAndQuestionMapping", "QuestionBank")',
+            data: param,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            success: function (response) {
+                window.location = "/QuestionBank/index";
+            },
+            error: function (data) {
+                window.location = "/QuestionBank/index";
+            }
+        });
+    }
+</script>

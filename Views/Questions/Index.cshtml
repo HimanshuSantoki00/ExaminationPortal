@@ -1,0 +1,64 @@
+﻿@model IEnumerable<ExaminationPortal.Models.Questions>
+@{
+    ViewBag.Title = "Questions";
+}
+
+<br />
+<div class="mt-3">
+    <a href="/Questions/Create/" class="btn btn-primary button">Add new Questions</a>
+</div>
+<br />
+<div class="table-auto">
+    <table class="table table-responsive">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Question)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OptionA)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OptionB)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OptionC)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OptionD)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CorrectAns)
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Question)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OptionA)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OptionB)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OptionC)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OptionD)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CorrectAns)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.QuestionID })
+                </td>
+            </tr>
+        }
+    </table>
+</div>

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<ExaminationPortal.Models.QuestionBank>
+@{
+    ViewBag.Title = "Question Bank";
+}
+
+<br />
+<div class="mt-3">
+    <a href="/QuestionBank/Create/" class="btn btn-primary button">Add new Question Bank</a>
+</div>
+<br />
+<div class="table-auto">
+    <table class="table table-responsive">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.QBankName)
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QBankName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.QBankID }) |
+                    @Html.ActionLink("Map Questions", "AddQBankAndQuestionMapping", new { id = item.QBankID })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

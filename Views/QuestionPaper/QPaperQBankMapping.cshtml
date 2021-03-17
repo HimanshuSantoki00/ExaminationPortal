@@ -1,0 +1,122 @@
+﻿@model ExaminationPortal.Models.QPaperQBankMapping
+@{
+    ViewBag.Title = "Mapping - Question Paper and Question Bank";
+}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<div class="form-horizontal">
+    <h2>Mapping - Question Paper and Question Bank</h2>
+    <hr />
+    <label class="text-danger" id="errorMessage"></label>
+    <label class="text-success" id="successMessage"></label>
+    <div class="form-group">
+        <label class="control-label col-md-2">Question Bank List</label>
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.QBankIDs, ViewBag.QBankList as SelectList, new { @id = "ddlQBankList", @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input id="btnAdd" type="button" value="Add" class="btn btn-primary" />
+            <input id="btnSave" type="button" value="Save" class="btn btn-primary" />
+        </div>
+    </div>
+    <div class="form-group">
+        <table id="tblList" class="table table-responsive">
+            <thead class="thead-dark">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.QPaperName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.QBankName)
+                    </th>
+                    <th hidden>
+                        @Html.DisplayNameFor(model => model.QBankID)
+                    </th>
+                </tr>
+            </thead>
+            @foreach (var item in Model.QPaperQBankMappingList)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.QPaperName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.QBankName)
+                    </td>
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.QBankID)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+<div>
+    <a href="/QuestionPaper/Index" class="btn btn-default">Back to Question Paper</a>
+</div>
+
+
+<script>
+    var selectQBankList = [];
+    $(document).ready(function () {
+        if (@ViewBag.IsAllQBankMapped == 1) {
+            $("#btnAdd").attr("disabled", true);
+            $("#btnSave").attr("disabled", true);
+            $("#errorMessage").html("You have already mapped Question Bank with a Question Paper.");
+        }
+        $("#btnAdd").click(function () { Add(); });
+        $("#btnSave").click(function () { Save(); });
+    });
+
+    function Add() {
+        $("#errorMessage").html("");
+        var selectedQBankID = $("#ddlQBankList").val();
+        var selectedQBankText = $("#ddlQBankList option:selected").text();
+        if ($.inArray(selectedQBankID, selectQBankList) >= 0) {
+            $("#errorMessage").html("You have already have added Question Bank for mapping, Please select different one.");
+            return;
+        }
+        selectQBankList.push(selectedQBankID);
+        $('#tblList tr:last').after('<tr><td>@ViewBag.QPaperName</td><td> ' + selectedQBankText + ' </td><td hidden> ' + selectedQBankID + ' </td></tr>');
+    }
+
+    function Save() {
+        $("#errorMessage").html("");
+        if (selectQBankList.length > 4) {
+            $("#errorMessage").html("You can add only 4 Question Bank with Paper.");
+            return;
+        } else if (selectQBankList.length <= 3) {
+            $("#errorMessage").html("You must have to select minimum 4 Question Bank.");
+            return;
+        }
+        var QuestionBankIDs = selectQBankList.join(",");
+        var param = JSON.stringify({ 'QPaperID': @ViewBag.QPaperID, 'selectQBankList': QuestionBankIDs });
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("QPaperQBankMappingSave", "QuestionPaper")',
+            data: param,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            success: function (response) {
+                $("#successMessage").html("Question bank was mapped successfully.");
+                $("#errorMessage").html("");
+                window.setTimeout(function () {
+                    location.reload();
+                }, 5000);
+
+            },
+            error: function (data) {
+                $("#errorMessage").html("Something went wrong, please reload page and try again!!!");
+                $("#successMessage").html("");
+                window.setTimeout(function () {
+                    location.reload();
+                }, 5000);
+            }
+        });
+    }
+</script>

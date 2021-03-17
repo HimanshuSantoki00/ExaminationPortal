@@ -1,0 +1,54 @@
+﻿@model ExaminationPortal.Models.User
+
+@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    ViewBag.Title = "Index";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+        <h1 style="color: #6d71f6; text-align: center; font-size: 24px; font-weight: 500; margin-top: 102px;"></h1>
+        <div class="card card-container" style="margin-top: 24px;">
+            <h1 style="color: #6d71f6; text-align: center; font-size: 24px; font-weight: 500; margin-top: 15px;">Log in to your account</h1>
+            <form id="Form1" runat="server" class="form-signin">
+                <div id="divLogin">
+                    <span id="reauth-email" class="reauth-email"></span>
+                    <div class="wrap-form-control validate-input m-b-10 " id="divUserName" data-validate="UserName required.">
+                        @Html.TextBoxFor(model => model.UserName, new { ID = "txtUserName", @class = "form-control", placeholder = "Enter Username", tabIndex = "1" })
+                    </div>
+                    <div class="wrap-form-control validate-input m-b-10" data-validate="Password required" id="divUserPassword" style="margin-top:9px;">
+                        @Html.TextBoxFor(model => model.UserPassword, new { ID = "txtUserPassword", style = "-webkit-text-security: disc;", @class = "form-control", placeholder = "Password", TabIndex = "2" })
+                    </div>
+                    <div class="loginbtn-block">
+                        <input type="submit" class="btn btn-lg btn-primary btn-block btn-signin" style="margin-top: 25px;" TabIndex="3" value="Continue" onclick="return CheckLoginValidation();" />
+                    </div>
+                    <br />
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+<script>
+    function CheckLoginValidation() {
+        var userName = $('#txtUserName').get(0).value;
+        var password = $('#txtUserPassword').get(0).value;
+
+        if (userName.trim() == '') {
+            alert("Username is required");
+            return false;
+        }
+        else
+            $('#divUserName').removeClass('alert-validate');
+
+        if (password.trim() == '') {
+            alert("Password is required");
+            return false;
+        }
+        else
+            $('#divUserPassword').removeClass('alert-validate');
+        return true;
+    }
+</script>
